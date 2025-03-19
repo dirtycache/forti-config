@@ -37,7 +37,7 @@ Defines the phase1 IPsec parameters and binds the tunnel to a specific local int
         next
     end`
 
-##config vpn ipsec phase2-interface
+## config vpn ipsec phase2-interface
 
 Defines the acceptable IPsec phase2 proposals, enables keepalive, and associates to the phase1-interface configuration construct of the same name. By default, FortiGate's phase 2 traffic selector (known to Cisco-heads as "encryption domain"; that is "interesting traffic we want to match and throw over this tunnel" is 0.0.0.0/0. This is a Good Thing. You allow all IPv4 addresses to match the tunnel, and use routing and firewall policy to control addressability and accessibility. Then, when you wish to permit any new src/dst combination of traffic, you can do so without needing to redefine the IPsec phase2 subnets - and bouncing your tunnel. 
 
@@ -45,17 +45,17 @@ Defines the acceptable IPsec phase2 proposals, enables keepalive, and associates
 | --- | --- | --- |
 | `S{TunnelName}` | Same as previous. | `w1_FOO-w1_BAR` |
 
-#Example config:
+### Example config:
 
-`config vpn ipsec phase2-interface
-    edit "${TunnelName}
-        set phase1name "${TunnelName}"
-        set proposal aes256-sha512
-        set keepalive enable
-    next
-end`
+    config vpn ipsec phase2-interface
+        edit "${TunnelName}
+            set phase1name "${TunnelName}"
+            set proposal aes256-sha512
+            set keepalive enable
+        next
+    end
 
-##config system interface
+## config system interface
 
 Instantiates and configures the logical VTI interface
 
@@ -68,22 +68,23 @@ Instantiates and configures the logical VTI interface
 | `${PeerDeviceIntfc}` | The interface on which the tunnel establishes on the peer device, if known. Otherwise omit this from your VTI interface description. | `wan1` |
 | `${TunnelBindIntfc}` | Same as previous. This use is to associate the logical VTI interface of the local device with the physical interface applicable to the IPsec tunnel. |
 
-#Example config:
-`config system interface
-    edit "${TunnelName}"
-        set vdom "root"
-        set ip ${Local_VTI_IPv4} 255.255.255.255
-        set allowaccess ping
-        set type tunnel
-        set remote-ip ${Remote_VTI_IPv4} 255.255.255.254
-        set description "IPsec: ${PeerDeviceName} ${PeerDeviceIntfc}
-        set monitor-bandwidth enable
-        set role wan
-        set interface "${TunnelBindIntfc}"
-    next
-end`
+### Example config:
 
-##config router static (Part 1: VTI)
+    config system interface
+        edit "${TunnelName}"
+            set vdom "root"
+            set ip ${Local_VTI_IPv4} 255.255.255.255
+            set allowaccess ping
+            set type tunnel
+            set remote-ip ${Remote_VTI_IPv4} 255.255.255.254
+            set description "IPsec: ${PeerDeviceName} ${PeerDeviceIntfc}
+            set monitor-bandwidth enable
+            set role wan
+            set interface "${TunnelBindIntfc}"
+        next
+    end
+
+## config router static (Part 1: VTI)
 
 At least with 7.2 code, FortiGates do not appropriately inject kernel routes for only the locally held IPv4 /32 on the VTI, rather than marking the entire /31 directly connected. Set a static route to fix this problem.
 
