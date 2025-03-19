@@ -102,14 +102,15 @@ At least with 7.2 code, FortiGates do not appropriately inject kernel routes for
         next
     end
 
-> [!A note about IPsec and SD-WAN]
-> At this point, you may decide to create a new SD-WAN zone. This is useful in a situation where device FOO has 2 ISPs and you wish to create 2 IPsec tunnels to BAR, one over each ISP. Simply put, an SD-WAN zone for IPsec collapses multiple tunnels between the same two peers into a logical grouping (and logical interface, used for firewall policy)
+# A note about IPsec and SD-WAN!
 
-> This scenario would change the interface names you use - chiefly, where you would use interface `w1_FOO-w1_BAR` you would instead specify an SD-WAN zone name such as `sdw_FOO-BAR`.
+At this point, you may decide to create a new SD-WAN zone. This is useful in a situation where device FOO has 2 ISPs and you wish to create 2 IPsec tunnels to BAR, one over each ISP. Simply put, an SD-WAN zone for IPsec collapses multiple tunnels between the same two peers into a logical grouping (and logical interface, used for firewall policy)
 
-> Perhaps a future revision of this guide will include creating such an SD-WAN zone, but for the moment, it does not.
+This scenario would change the interface names you use - chiefly, where you would use interface `w1_FOO-w1_BAR` you would instead specify an SD-WAN zone name such as `sdw_FOO-BAR`.
 
-> For now, consider that once you build objects and policy referencing any particular interface, it gets much harder to migrate that interface into an SD-WAN zone later. Therefore, consider building an SD-WAN zone even if you only have one member interface.
+Perhaps a future revision of this guide will include creating such an SD-WAN zone, but for the moment, it does not.
+
+For now, consider that once you build objects and policy referencing any particular interface, it gets much harder to migrate that interface into an SD-WAN zone later. Therefore, consider building an SD-WAN zone even if you only have one member interface.
 
 ## config firewall address
 
@@ -121,24 +122,20 @@ It is acceptable with `set subnet` to use either CIDR notation or dotted quad.
 
 **NOTE: In the example, the option of `set allow-routing enable` is set. This means you can use this named address object in place of a numerical prefix when creating static routes.
 
-| Variable | Description | Example |
-| --- | --- | --- |
-| `
+### Example config:
 
-#Example config:
+    config firewall address
+        edit "n-10.0.0.0_8-Bogon_RFC1918"
+            set allow-routing enable
+            set subnet 10.0.0.0 255.0.0.0
+        next
+        edit "n-100.64.0.0_10-Bogon_CGNAT"
+            set allow-routing enable
+            set subnet 100.64.0.0 255.192.0.0
+        next
+    end
 
-`config firewall address
-    edit "n-10.0.0.0_8-Bogon_RFC1918"
-        set allow-routing enable
-        set subnet 10.0.0.0 255.0.0.0
-    next
-    edit "n-100.64.0.0_10-Bogon_CGNAT"
-        set allow-routing enable
-        set subnet 100.64.0.0 255.192.0.0
-    next
-end`
-
-##config firewall addrgrp
+## config firewall addrgrp
 
 Next, we add a layer of abstraction which is useful in policy. We could write the policy referencing the `address` objects directly:
 
@@ -152,34 +149,34 @@ In the example config below, the prefix 'gn' indicates it is a group of networks
 
 As with the firewall address object, the `set allow-routing enable` flag is set so we can use this group object for static routing. **If routing is enabled on a group, it must also be enabled upon all members of the group.**
 
-#Example config:
+### Example config:
 
-`config firewall addrgrp
-    edit "gn-FOO_Subnets"
-        set member "n-10.0.0.0_8-Bogon_RFC1918"
-        set allow-routing enable
-    next
-    edit "gn-BAR_Subnets"
-        set member "n-100.64.0.0_10-Bogon_CGNAT" 
-        set allow-routing enable
-    next
-end`
+    config firewall addrgrp
+        edit "gn-FOO_Subnets"
+            set member "n-10.0.0.0_8-Bogon_RFC1918"
+            set allow-routing enable
+        next
+        edit "gn-BAR_Subnets"
+            set member "n-100.64.0.0_10-Bogon_CGNAT" 
+            set allow-routing enable
+        next
+    end
 
-##config router static (Part 2: Remote Subnets)
+## config router static (Part 2: Remote Subnets)
 
 This is how you tell your local FortiGate FOO about subnets reachable via the tunnel you just made. You'lll add a static route referencing group `gn-BAR-Subnets` via next-hop address of BAR's VTI. **Should you ever need to add an additional prefix, all you have to do is add the address object to the group object - the routing configuration (and firewall policy, as well as anything else that references the group) will inherit and update based upon members of the group.  Cool, huh?**
 
 ***NOTE: Notice the syntax for use with an *object* is `set dstaddr` as opposed to `set dst` when routing IP/mask!***
 
-#Example config:
+### Example config:
 
-`config router static
-    edit ${RouteSeq}
-        set dstaddr "gn-BAR_Subnets"
-        set device "${TunnelName}"
-	set gateway "${Remote_VTI_IPv4}"
-    next
-end`
+    config router static
+        edit ${RouteSeq}
+            set dstaddr "gn-BAR_Subnets"
+            set device "${TunnelName}"
+	    set gateway "${Remote_VTI_IPv4}"
+        next
+    end
 
 ## Sanity Check
 
