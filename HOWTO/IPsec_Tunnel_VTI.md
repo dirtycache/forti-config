@@ -18,7 +18,7 @@ Defines the phase1 IPsec parameters and binds the tunnel to a specific local int
 | `${Peer_IPv4_Endpoint}` | The remote device's global address with which you are establishing IPsec. | `198.51.100.44` |
 | `${TunnelPSK}`| The pre-shared key for this tunnel | `SuperSecretTunnelPSK!` |
 
-# Example config:
+### Example config:
 
 `config vpn ipsec phase1-interface
     edit "S{TunnelName}"
