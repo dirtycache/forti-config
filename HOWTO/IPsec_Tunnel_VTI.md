@@ -1,10 +1,12 @@
 This document explains how to build a "standard" IPsec tunnel with IPv4 numbered VTI interfaces.
 
+Known to work between FortiGates with v7.2 and lightly tested with other OEM devices, but as always YMMV.
+
 Numbered VTIs are useful because you have a next-hop address which you can ping and use with routing protocols, versus the default unnumbered behavior of "if it matches policy, throw it in the encryption engine and hope it comes out the other side!".
 
-#Configuration Components:
+# Configuration Components:
 
-##config vpn ipsec phase1-interface
+## config vpn ipsec phase1-interface
 
 Defines the phase1 IPsec parameters and binds the tunnel to a specific local interface, usually WAN.
 
@@ -16,7 +18,7 @@ Defines the phase1 IPsec parameters and binds the tunnel to a specific local int
 | `${Peer_IPv4_Endpoint}` | The remote device's global address with which you are establishing IPsec. | `198.51.100.44` |
 | `${TunnelPSK}`| The pre-shared key for this tunnel | `SuperSecretTunnelPSK!` |
 
-#Example config:
+# Example config:
 
 `config vpn ipsec phase1-interface
     edit "S{TunnelName}"
