@@ -1,0 +1,6 @@
+config router static
+    edit ${RouteSeq}
+        set dst ${VTI_IPv4_Prefix}/31
+        set device "${TunnelName}"
+    next
+end

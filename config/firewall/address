@@ -1,0 +1,77 @@
+config firewall address
+	edit "n-0.0.0.0_8-Bogon_This-Network"
+        set color 6
+        set allow-routing enable
+        set subnet 0.0.0.0 255.0.0.0
+    next
+    edit "n-10.0.0.0_8-Bogon_RFC1918"
+        set color 6
+        set allow-routing enable
+        set subnet 10.0.0.0 255.0.0.0
+    next
+    edit "n-100.64.0.0_10-Bogon_CGNAT"
+        set color 6
+        set allow-routing enable
+        set subnet 100.64.0.0 255.192.0.0
+    next
+    edit "n-127.0.0.0_8-Bogon_Loopback"
+        set color 6
+        set allow-routing enable
+        set subnet 127.0.0.0 255.0.0.0
+    next
+    edit "n-169.254.0.0_16-Bogon_Link-Local"
+        set color 6
+        set allow-routing enable
+        set subnet 169.254.0.0 255.255.0.0
+    next
+    edit "n-192.0.0.0_24-Bogon_IETF_Protocol_Assignments"
+        set color 6
+        set allow-routing enable
+        set subnet 192.0.0.0 255.255.255.0
+    next
+    edit "n-192.0.2.0_24-Bogon_TEST-NET-1"
+        set color 6
+        set allow-routing enable
+        set subnet 192.0.2.0 255.255.255.0
+    next
+    edit "n-192.168.0.0_16-Bogon_RFC1918"
+        set color 6
+        set allow-routing enable
+        set subnet 192.168.0.0 255.255.0.0
+    next
+    edit "n-192.88.99.0_24-Bogon_6to4-Relay-Anycast"
+        set color 6
+        set allow-routing enable
+        set subnet 192.88.99.0 255.255.255.0
+    next
+    edit "n-198.18.0.0_15-Bogon_RFC2544-Interconnect"
+        set color 6
+        set allow-routing enable
+        set subnet 198.18.0.0 255.254.0.0
+    next
+    edit "n-198.51.100.0_24-Bogon_TEST-NET-2"
+        set color 6
+        set allow-routing enable
+        set subnet 198.51.100.0 255.255.255.0
+    next
+    edit "n-203.0.113.0_24-Bogon_TEST-NET-3"
+        set color 6
+        set allow-routing enable
+        set subnet 203.0.113.0 255.255.255.0
+    next
+    edit "n-224.0.0.0_4-Bogon_Multicast"
+        set color 6
+        set allow-routing enable
+        set subnet 224.0.0.0 240.0.0.0
+    next
+    edit "n-240.0.0.0_4-Bogon_Future-Use"
+        set color 6
+        set allow-routing enable
+        set subnet 240.0.0.0 240.0.0.0
+    next
+    edit "h-255.255.255.255_32-Bogon_Limited_Broadcast"
+        set color 6
+        set allow-routing enable
+        set subnet 255.255.255.255 255.255.255.255
+    next
+end

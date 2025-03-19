@@ -1,0 +1,14 @@
+config system interface
+    edit "${TunnelName}"
+        set vdom "root"
+        set ip ${Local_VTI_IPv4} 255.255.255.255
+        set allowaccess ping
+        set type tunnel
+        set remote-ip ${Remote_VTI_IPv4} 255.255.255.254
+        set description "IPsec: ${PeerDeviceName} ${PeerDeviceIntfc}
+        set monitor-bandwidth enable
+        set role wan
+        set interface "${TunnelBindIntfc}"
+    next
+end
+

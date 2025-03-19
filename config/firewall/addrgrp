@@ -1,0 +1,7 @@
+config firewall addrgrp
+    edit "gn-Global-Internet-Nets"
+        set member "all"
+        set color 21
+        set allow-routing enable
+    next
+end
