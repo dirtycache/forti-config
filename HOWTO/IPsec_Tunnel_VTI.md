@@ -19,6 +19,7 @@ Defines the phase1 IPsec parameters and binds the tunnel to a specific local int
 | `${TunnelPSK}`| The pre-shared key for this tunnel | `SuperSecretTunnelPSK!` |
 
 ### Example config:
+
     config vpn ipsec phase1-interface
         edit "S{TunnelName}"
             set interface "${TunnelBindIntfc}"
@@ -35,6 +36,7 @@ Defines the phase1 IPsec parameters and binds the tunnel to a specific local int
             set psksecret ${TunnelPSK}
         next
     end
+
 ## config vpn ipsec phase2-interface
 
 Defines the acceptable IPsec phase2 proposals, enables keepalive, and associates to the phase1-interface configuration construct of the same name. By default, FortiGate's phase 2 traffic selector (known to Cisco-heads as "encryption domain"; that is "interesting traffic we want to match and throw over this tunnel" is 0.0.0.0/0. This is a Good Thing. You allow all IPv4 addresses to match the tunnel, and use routing and firewall policy to control addressability and accessibility. Then, when you wish to permit any new src/dst combination of traffic, you can do so without needing to redefine the IPsec phase2 subnets - and bouncing your tunnel. 
