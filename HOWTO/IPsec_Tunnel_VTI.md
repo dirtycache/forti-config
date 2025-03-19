@@ -19,7 +19,6 @@ Defines the phase1 IPsec parameters and binds the tunnel to a specific local int
 | `${TunnelPSK}`| The pre-shared key for this tunnel | `SuperSecretTunnelPSK!` |
 
 ### Example config:
-
     config vpn ipsec phase1-interface
         edit "S{TunnelName}"
             set interface "${TunnelBindIntfc}"
