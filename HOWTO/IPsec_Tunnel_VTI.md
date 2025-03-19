@@ -186,35 +186,37 @@ This does not require any firewall policy itself by default, as the FortiGate co
 
 ## config firewall policy
 
-Now that you have created your tunnel, your address objects, and your address groups, it's time to assemble it all into a firewall policy. This example consists of two polices: 1) permit all IPv4 traffic from `gn-FOO_Subnets` to `gn-BAR_Subnets` and 2) the reverse. It further assumes that on FOO, `gn-FOO_Subnets` prefixes are reachable via local interface `lan`. Depending on platform, this could be `lan` or `internal1` or a zone containing several interfaces. Use your brain. It's your network, after all.
+Now that you have created your tunnel, your address objects, and your address groups, it's time to assemble it all into a firewall policy. This example consists of two polices: 1) permit all IPv4 traffic from `gn-FOO_Subnets` to `gn-BAR_Subnets` and 2) the reverse. It further assumes that on FOO, `gn-FOO_Subnets` prefixes are reachable via local interface `lan`. 
+
+Depending on platform, this could be `lan` or `internal1` or a zone containing several interfaces. **Use your brain. It's your network, after all.**
 
 As with routing objects in the CLI, policy entries require an ID. Again, these are generated automatically when using the FortiGate GUI. Use care on the CLI to not clobber existing policy. If you create via CLI, you may wish to re-order using the GUI - it's an absolute pain in the ass to re-order via CLI.
 
-#Example config:
+### Example config:
 
-`config firewall policy
-    edit 38
-        set name "IPsec: FOO to BAR"
-        set srcintf "lan"
-        set dstintf "w1_FOO-w1_BAR"
-        set action accept
-        set srcaddr "gn-FOO_Subnets"
-        set dstaddr "gn-BAR_Subnets"
-        set schedule "always"
-        set service "ALL"
-        set logtraffic all
-    next
-    edit 39
-        set name "IPsec: BAR to FOO"
-        set srcintf "w1_FOO-w1_BAR"
-        set dstintf "lan"
-        set action accept
-        set srcaddr "gn-BAR_Subnets"
-        set dstaddr "gn-FOO_Subnets"
-        set schedule "always"
-        set service "ALL"
-        set logtraffic all
-    next
-end`
+    config firewall policy
+        edit 38
+            set name "IPsec: FOO to BAR"
+            set srcintf "lan"
+            set dstintf "w1_FOO-w1_BAR"
+            set action accept
+            set srcaddr "gn-FOO_Subnets"
+            set dstaddr "gn-BAR_Subnets"
+            set schedule "always"
+            set service "ALL"
+            set logtraffic all
+        next
+        edit 39
+            set name "IPsec: BAR to FOO"
+            set srcintf "w1_FOO-w1_BAR"
+            set dstintf "lan"
+            set action accept
+            set srcaddr "gn-BAR_Subnets"
+            set dstaddr "gn-FOO_Subnets"
+            set schedule "always"
+            set service "ALL"
+            set logtraffic all
+        next
+    end
 
-### EOF
+### <EOF>
