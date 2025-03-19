@@ -20,22 +20,22 @@ Defines the phase1 IPsec parameters and binds the tunnel to a specific local int
 
 ### Example config:
 
-`config vpn ipsec phase1-interface
-    edit "S{TunnelName}"
-        set interface "${TunnelBindIntfc}"
-        set ike-version 2
-	set local-gw "${Local_IPv4_Endpoint}"
-        set peertype any
-        set net-device enable
-        set proposal aes256-sha512
-        set auto-negotiate disable
-        set dpd on-idle
-        set dhgrp 21
-        set nattraversal disable
-        set remote-gw ${Peer_IPv4_Endpoint}
-        set psksecret ${TunnelPSK}
-    next
-end`
+    config vpn ipsec phase1-interface
+        edit "S{TunnelName}"
+            set interface "${TunnelBindIntfc}"
+            set ike-version 2
+    	    set local-gw "${Local_IPv4_Endpoint}"
+            set peertype any
+            set net-device enable
+            set proposal aes256-sha512
+            set auto-negotiate disable
+            set dpd on-idle
+            set dhgrp 21
+            set nattraversal disable
+            set remote-gw ${Peer_IPv4_Endpoint}
+            set psksecret ${TunnelPSK}
+        next
+    end`
 
 ##config vpn ipsec phase2-interface
 
