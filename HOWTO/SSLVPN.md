@@ -108,6 +108,8 @@ This step routes ACME traffic via `$(IntfcACME)` - this is required in an SD-WAN
 
 ## 4) Ensure the ACME server resolves and is reachable from source address $(srcAddrACME)
 
+### runtime commands:
+
     # execute ping-options source $(srcAddrACME)
     # execute ping acme-v02.api.letsencrypt.org
 
@@ -125,15 +127,16 @@ You may wish to run `# diagnose sniffer packet any 'icmp and host 172.65.32.248'
             set acme-email "$(ACME_Email)"
         next
 
-    ##By enabling this feature you declare that you agree to the Terms of Service at https://acme-v02.api.letsencrypt.org/directory`
-    ##Do you want to continue? (y/n)`
+    (the next two lines are output returned from the CLI - do not paste!)
+    By enabling this feature you declare that you agree to the Terms of Service at https://acme-v02.api.letsencrypt.org/directory`
+    Do you want to continue? (y/n)`
 
     y
     end
 
 ## 6)	Verify the certificate enrollment was successful
 
-### runtime command:
+### runtime commands:
 
 `# get vpn certificate local details $(VPNFQDN)`
 
