@@ -151,7 +151,7 @@ Output should look like:
     Valid to:    <date>
     Fingerprint: <fingerprint>
     Serial Num:  <serial number>
-ACME details:
+    ACME details:
     Status: The certificate for the managed domain has been renewed successfully and can be used (valid since Wed, 05 Mar 2025 20:18:04 GMT).
     Staging status: Nothing in staging
 
