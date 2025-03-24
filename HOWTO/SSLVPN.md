@@ -566,5 +566,3 @@ config firewall policy
 end
 
 ## 24)	Test and verify proper operation of SSLVPN.
-
-ddd
