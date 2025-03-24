@@ -39,9 +39,9 @@ Variables used are in FortiManager script syntax.
 
 ## 1) bind a secondary IP address to the ACME interface
 
-Bind the secondary /32 address upon $(srcIntfcACME) which is used as the ACME client source-ip. 
+Bind the secondary /32 address upon `$(srcIntfcACME)` which is used as the ACME client source-ip. 
 
-Binding to the interface allows the FortiGate to listen for http-01 challenges to port 80/tcp. 
+Binding to the interface allows the FortiGate to listen for and respond to `http-01` challenges to port 80/tcp. 
 
 *A secondary address is not explicitly required, but I think it's a good idea when one is available.*
 
