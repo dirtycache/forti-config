@@ -92,7 +92,7 @@ Add address objects for hosts `*.letsencrypt.org`, `letsencrypt.org`. Next, crea
 
 This step routes ACME traffic via `$(IntfcACME)` - this is required in an SD-WAN scenario because `config system acme` does not support use of SD-WAN.
 
-### config script
+### config script:
 
     config router static
           edit 0
@@ -116,7 +116,7 @@ You may wish to run `# diagnose sniffer packet any 'icmp and host 172.65.32.248'
 
 ## 5)  Configure certificate request
 
-### config script
+### config script:
 
     config vpn certificate local
         edit "$(VPN_FQDN)"
@@ -195,7 +195,7 @@ This creates an address object for the SSLVPN client address pool.
 
 9) Adjust remote authentication timeout from 5 seconds (default) to 60 seconds to accomodate the SAML iDP and user interaction
 
-### config script
+### config script:
 
     config system global
         set remoteauthtimeout 60
