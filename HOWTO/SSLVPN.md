@@ -125,10 +125,11 @@ You may wish to run `# diagnose sniffer packet any 'icmp and host 172.65.32.248'
             set acme-email "$(ACME_Email)"
         next
 // Do not paste these comment lines. It is showing output returned after you press <Enter> after `next`:
+
 // `By enabling this feature you declare that you agree to the Terms of Service at https://acme-v02.api.letsencrypt.org/directory`
 // `Do you want to continue? (y/n)`
-    y
-    end
+`y`
+`end`
 
 6)	Verify the certificate enrollment was successful
 
