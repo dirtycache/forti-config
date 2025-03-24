@@ -155,7 +155,7 @@ Output should look like:
     Status: The certificate for the managed domain has been renewed successfully and can be used (valid since Wed, 05 Mar 2025 20:18:04 GMT).
     Staging status: Nothing in staging
 
-7)	Create the firewall internal loopback interface to which SSLVPN will be bound.
+## 7)	Create the firewall internal loopback interface to which SSLVPN will be bound.
 
 ### config script:
 
@@ -169,7 +169,7 @@ Output should look like:
         next
     end
 
-8) Create standardized firewall address and firewall addrgrp objects on this firewall (these may already exist in your environment)
+## 8) Create standardized firewall address and firewall addrgrp objects on this firewall (these may already exist in your environment)
 
 ### config script:
 
@@ -200,7 +200,7 @@ This creates an address object for the SSLVPN client address pool.
         next
     end
 
-9) Adjust remote authentication timeout from 5 seconds (default) to 60 seconds to accomodate the SAML iDP and user interaction
+## 9) Adjust remote authentication timeout from 5 seconds (default) to 60 seconds to accomodate the SAML iDP and user interaction
 
 ### config script:
 
@@ -208,7 +208,9 @@ This creates an address object for the SSLVPN client address pool.
         set remoteauthtimeout 60
     end
 
-10) Firewall static routing. I like to do this as a "doublecheck" that the SSLVPN Client subnet is routed always via the FortiGate's `ssl.root` interface.
+## 10) Firewall static routing
+
+I like to do this as a "doublecheck" that the SSLVPN Client subnet is routed always via the FortiGate's `ssl.root` interface.
 
 ### config script:
 
@@ -221,7 +223,7 @@ This creates an address object for the SSLVPN client address pool.
         next
     end
 
-11) Upload the IdP certificate to the firewall
+## 11) Upload the IdP certificate to the firewall
 
 After you configure SAML between your FortiGate and the remote SP (such as a Duo Application, Entra Enterprise App SSO, or any other) you should be prompted to download that entity's SSL certificate. You'll need to add this to your FortiGate configuration. There are two ways to do this:
 
@@ -258,7 +260,7 @@ If you're using FortiManager, this could be a great thing to define as a metadat
     next
     end
 
-12)  Configure the saml user on your FortiGate:
+## 12)  Configure the saml user on your FortiGate:
 
 NOTE: You will need certain URLs of the SP to configure SAML with your FortiGate, and possibly username and group name attribute claims in this configuration.
 
@@ -280,7 +282,9 @@ Such specifics are outside the scope of this guide.
         next
     end
 
-13) You typically need to configure group matching between groups existent within your SAML IdP. This is only an example - refer to documentation of your SAML provider. The important thing to note here is that `set server-name` within the stanza of `config match -> edit 0` is that `server-name` refers to the name of the object you created in the previous step under `config user saml` e.g., "`SSLVPN-SP`".
+## 13) Group matching
+
+You typically need to configure group matching between groups existent within your SAML IdP. This is only an example - refer to documentation of your SAML provider. The important thing to note here is that `set server-name` within the stanza of `config match -> edit 0` is that `server-name` refers to the name of the object you created in the previous step under `config user saml` e.g., "`SSLVPN-SP`".
 
 ### config script:
 
@@ -296,7 +300,9 @@ Such specifics are outside the scope of this guide.
         next
     end
 
-14) Configure the address for the VIP on `wan1`. Or `port1` or `x2` or whatever you have used if your FortiGate doesn't have an interface named `wan1`. Whatever, you do you - it's your network!  Here, we assume "your first Internet circuit == `wan1`".
+## 14)  Configure VIP - wan1
+
+Configure the address for the VIP on `wan1`. Or `port1` or `x2` or whatever you have used if your FortiGate doesn't have an interface named `wan1`. Whatever, you do you - it's your network!  Here, we assume "your first Internet circuit == `wan1`".
 
 This is the same IPv4 address you specified previously for the ACME client source-ip (`${srcAddrACME})`), and **may** be a secondary /32 on `wan1` if you have one available and configured, or it might be the only IPv4 address configured on `wan1`. Either scenario will work.
 
@@ -326,7 +332,9 @@ Finally, yes, the `set extip` IP address value is not wrapped in double quotes, 
         next
     end
 
-15) Repeat the previous step to configure VIPs on `wan2` if applicable.
+## 15) Configure VIP - wan2
+
+Repeat the previous step to configure VIPs on `wan2` if applicable.
 
 ### config script:
 
@@ -350,7 +358,9 @@ Finally, yes, the `set extip` IP address value is not wrapped in double quotes, 
         next
     end
 
-16) Create two `firewall address` objects. This allows you to reference the destination L3 IP addresses, rather than the L4 protocol/port VIPs, later on when you configure `firewall policy` and keeps the policy rules more streamlined.
+## 16) firewall address objects
+
+Create two `firewall address` objects. This allows you to reference the destination L3 IP addresses, rather than the L4 protocol/port VIPs, later on when you configure `firewall policy` and keeps the policy rules more streamlined.
 
 ### config script:
 
@@ -365,7 +375,9 @@ Finally, yes, the `set extip` IP address value is not wrapped in double quotes, 
         next
     end
 
-17) Create a `firewall addrgrp` containing the two addresses you created in the previous step.
+## 17) firewall addrgrp
+
+Create a `firewall addrgrp` containing the two addresses you created in the previous step.
 
 This allows you to craft one policy rule to permit connections to both VIP adddresses.
 
@@ -378,7 +390,9 @@ This allows you to craft one policy rule to permit connections to both VIP adddr
         next
     end
 
-18) Create `firewall custom service` “DTLS” for 4433/udp.
+## 18) firewall service custom 
+
+Create `firewall service custom` “DTLS” for 4433/udp.
 
 ### config script:
 
@@ -389,7 +403,9 @@ This allows you to craft one policy rule to permit connections to both VIP adddr
         next
     end
 
-19) Configure the firewall SSLVPN portals. First, `$(VPNFQDN_portal)` for when a user is a member of `$(VPN_SecGroup)` and second, `no-access` for all other users and groups.
+## 19) SSLVPN Portals
+
+Configure the firewall SSLVPN portals. First, `$(VPNFQDN_portal)` for when a user is a member of `$(VPN_SecGroup)` and second, `no-access` for all other users and groups.
 
 ### config script:
 
@@ -406,7 +422,9 @@ This allows you to craft one policy rule to permit connections to both VIP adddr
         next
     end
 
-20) Configure the firewall SSLVPN settings:
+## 20) SSLVPN Settings
+
+Configure the firewall SSLVPN settings:
 
 A note about `$(ClientDNS1)` and `$(ClientDNS2)`: These may be any DNS server you wish, but generally is either located on your LAN, or possibly you've attached a /32 from `$(SSLVPN_Client_Prefix)` to your `ssl.root` interface and are going to enable the FortiGate's DNS service on `ssl.root` and use DNS Filter! In that case, you only need `$(ClientDNS1)`<g> 
 
@@ -433,7 +451,9 @@ A note about `$(ClientDNS1)` and `$(ClientDNS2)`: These may be any DNS server yo
     end
 end
 
-21)	Configure the SSLVPN Login replacement message to completely disable web mode in favor of FortiClient.
+## 21)	system replacemsg sslvpn sslvpn-login
+
+Configure the SSLVPN Login replacement message to completely disable web mode in favor of FortiClient.
 
 ### config script:
 
@@ -484,7 +504,9 @@ end
      </div>"
     end
 
-22) Add firewall policies.
+## 22) config firewall policy
+
+Add firewall policies.
 
 NOTE: You will need to enable multiple interface policies (found in GUI under Feature Visibility) for these policies to work.
 
@@ -543,6 +565,6 @@ config firewall policy
     next
 end
 
-24)	Test and verify proper operation of SSLVPN.
+## 24)	Test and verify proper operation of SSLVPN.
 
 
