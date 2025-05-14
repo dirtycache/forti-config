@@ -528,20 +528,20 @@ NOTE: This policy rule includes service `PING` because this is required for ping
 
 ### config script:
  
- config firewall policy
-    edit 0
-        set name "VPN VIP ingress"
-        set status enable
-        set srcintf "wan1" "wan2"
-        set dstintf "any"
-        set action accept
-        set srcaddr "all"
-        set dstaddr "gh-VPN_VIPs"
-        set schedule "always"
-        set service "DTLS" "HTTPS" "PING" "TRACEROUTE"
-        set global-label "SSLVPN"
-    next
-end
+    config firewall policy
+        edit 0
+            set name "VPN VIP ingress"
+            set status enable
+            set srcintf "wan1" "wan2"
+            set dstintf "any"
+            set action accept
+            set srcaddr "all"
+            set dstaddr "gh-VPN_VIPs"
+            set schedule "always"
+            set service "DTLS" "HTTPS" "PING" "TRACEROUTE"
+            set global-label "SSLVPN"
+        next
+    end
 
 Next, add a policy to permit traffic matching the the source: (User in `$(VPN_SecGroup)` +  srcip=`$(SSLVPN_Client_Prefix`) and destination=`$(LAN_Prefix)` via outgoing interface (zone) `Zone_LAN`.
 
@@ -549,20 +549,20 @@ This policy permits all IP traffic. You may wish to craft more granular policies
 
 ### config script:
 
-config firewall policy
-    edit 0
-        set name "SSLVPN Client Access"
-        set status enable
-        set srcintf "ssl.root"
-        set dstintf "Zone_LAN"
-        set action accept
-        set srcaddr "$(SSLVPN_Client_Prefix"
-        set dstaddr "$(LAN_Prefix)"
-        set schedule "always"
-        set service "ALL"
-        set groups "$(VPN_SecGroup)"
-        set global-label "SSLVPN"
-    next
-end
+    config firewall policy
+        edit 0
+            set name "SSLVPN Client Access"
+            set status enable
+            set srcintf "ssl.root"
+            set dstintf "Zone_LAN"
+            set action accept
+            set srcaddr "$(SSLVPN_Client_Prefix"
+            set dstaddr "$(LAN_Prefix)"
+            set schedule "always"
+            set service "ALL"
+            set groups "$(VPN_SecGroup)"
+            set global-label "SSLVPN"
+        next
+    end
 
 ## 24)	Test and verify proper operation of SSLVPN.
